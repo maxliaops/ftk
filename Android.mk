@@ -5,6 +5,8 @@ include $(CLEAR_VARS)
 
 LOCAL_CFLAGS += -DLINUX
 LOCAL_CFLAGS += -DUSE_LINUX_NATIVE
+LOCAL_CFLAGS += -DHAS_PNG
+LOCAL_CFLAGS += -DHAS_JPEG
 LOCAL_CFLAGS += -DTESTDATA_DIR=\"$(LOCAL_PATH)/testdata\"
 LOCAL_CFLAGS += -DFTK_DATA_ROOT=\"/data/ndroid/ftk\"
 LOCAL_CFLAGS += -DLOCAL_DATA_DIR=\"$(LOCAL_PATH)\"
@@ -24,6 +26,8 @@ LOCAL_SRC_FILES:= \
 	src/ftk_main_loop.c \
 	src/ftk_util.c \
 	src/ftk_bitmap_factory.c \
+	src/ftk_image_jpeg_decoder.c \
+	src/ftk_image_png_decoder.c \
 	src/ftk_source_idle.c \
 	src/ftk_widget.c \
 	src/ftk.c \
@@ -68,14 +72,21 @@ LOCAL_SRC_FILES:= \
 	src/backend/fb/ftk_backend_fb.c
 
 
+LOCAL_STATIC_LIBRARIES := \
+	libpng \
+
 LOCAL_SHARED_LIBRARIES := \
-	libc
+	libc \
+	libjpeg \
+	libz
 
 LOCAL_C_INCLUDES += \
 	$(LOCAL_PATH)/src/os/linux \
 	$(LOCAL_PATH)/src/backend/fb \
-	$(LOCAL_PATH)/src
-
+	$(LOCAL_PATH)/src \
+	external/libpng \
+	external/jpeg \
+	external/zlib
 
 LOCAL_MODULE:= libftk
 
