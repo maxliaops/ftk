@@ -32,6 +32,7 @@
 #include "ftk_log.h"
 #include "ftk_key.h"
 #include "ftk_display.h"
+#include "ftk_globals.h"
 #include <linux/input.h>
 #include "ftk_source_input.h"
 

@@ -37,6 +37,7 @@
 #include "ftk_animator.h"
 #include "ftk_xml_parser.h"
 #include "ftk_animator_expand.h"
+#include "ftk_list_view.h"
 
 typedef struct _PrivInfo
 {
