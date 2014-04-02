@@ -1,0 +1,25 @@
+
+---------------------------------------------------------
+1. build library
+make -C lib
+
+2. build test
+make -C test
+
+3. run test
+cd test ; export LD_LIBRARY_PATH=../lib ; ./xxx_test.out
+
+4. build demo
+make -C demo
+
+5. run demo
+cd demo ; export LD_LIBRARY_PATH=../lib ; ./xxx_demo.out
+---------------------------------------------------------
+
+
+
+---------------------------------------------------------
+how to change backend (fb and x11) ?
+
+1. modify lib/Makefile
+---------------------------------------------------------
