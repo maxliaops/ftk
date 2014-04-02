@@ -1,0 +1,147 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.60])
+AC_INIT(ftk, 0.1, xianjimli@hotmail.com)
+AC_CONFIG_SRCDIR([src/ftk_canvas.h])
+AC_CONFIG_HEADERS([config.h])
+AM_INIT_AUTOMAKE(ftk, 0.1)
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_LIBTOOL
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-ljpeg':
+AC_CHECK_LIB([jpeg], [main])
+# FIXME: Replace `main' with a function in `-lpng':
+AC_CHECK_LIB([png], [main])
+
+# Checks for header files.
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h execinfo.h])
+
+AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb|linux-sigma],
+                    [use which display/input backend])])
+
+case "$with_backend" in
+	linux-x11*) 
+		backend="x11"
+		CFLAGS="$CFLAGS -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM=\"\\\"$with_backend\\\"\"";
+		LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -lX11 -lXext";;
+	linux-vlcd*)
+		backend="fb"
+		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE -DPC_EMU";;
+	linux-dfb*)
+		backend="dfb"
+		DFB_VERSION=1.2.0
+		PKG_CHECK_MODULES(DIRECTFB, [directfb >= $DFB_VERSION])
+
+		CFLAGS="$CFLAGS -DUSE_LINUX_DFB $DIRECTFB_CFLAGS";
+		LDFLAGS="$LDFLAGS $DIRECTFB_LIBS";;
+	linux-sigma*)
+		backend="sigma"
+		CFLAGS="$CFLAGS $SIGMA_CFLAGS";
+		LDFLAGS="$LDFLAGS $SIGMA_OBJS $SIGMA_LIBS";;
+	*)
+		backend="fb"
+		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE";;
+esac
+
+echo with_backend=$with_backend
+
+AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
+AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
+AM_CONDITIONAL(FTK_BACKEND_DFB, test "$backend" = "dfb")
+AM_CONDITIONAL(FTK_BACKEND_SIGMA, test "$backend" = "sigma")
+
+AC_ARG_WITH(fontengine, [AC_HELP_STRING([--with-fontengine=default|freetype],
+                    [use which font engine])])
+case "$with_fontengine" in
+	freetype) 
+	  	export FREETYPE_CONFIG="pkg-config freetype2"
+    	FREETYPE_CFLAGS=`$FREETYPE_CONFIG --cflags`
+	    FREETYPE_LIBS=`$FREETYPE_CONFIG --libs`
+  		FREETYPE_LIBS="$FONTCONFIG_LIBS $FREETYPE_LIBS"
+		FREETYPE_CFLAGS="$FONTCONFIG_CFLAGS $FREETYPE_CFLAGS"
+		CFLAGS="$CFLAGS  $FREETYPE_CFLAGS -DUSE_FREETYPE"
+		LDFLAGS="$LDFLAGS $FREETYPE_LIBS"
+		font_engine="freetype";;
+	*)
+		font_engine="default";;
+esac
+
+AM_CONDITIONAL(FONT_ENGINE_FREETYPE, test "$font_engine" = "freetype")
+AM_CONDITIONAL(FONT_ENGINE_DEFAULT,  test "$font_engine" = "default")
+
+AC_ARG_ENABLE(tslib,
+  [  --enable-tslib            build with tslib support [[default=no]]],,
+  enable_tslib=no)
+
+if test "$enable_tslib" = "yes"; then
+  CFLAGS="$CFLAGS -DUSE_TSLIB `pkg-config --cflags tslib-0.0`"
+  LDFLAGS="$LDFLAGS `pkg-config --libs tslib-0.0`"
+fi
+
+AM_CONDITIONAL(ENABLE_TSLIB,  test "$enable_tslib" = "yes")
+
+AC_ARG_ENABLE(cairo,
+  [  --enable-cairo            build with cairo support [[default=no]]],,
+  enable_cairo=no)
+
+if test "$enable_cairo" = "yes"; then
+  CFLAGS="$CFLAGS -DUSE_CAIRO `pkg-config --cflags cairo`"
+  LDFLAGS="$LDFLAGS `pkg-config --libs cairo`"
+fi
+
+AM_CONDITIONAL(ENABLE_CAIRO,  test "$enable_cairo" = "yes")
+
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_INLINE
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_CONFIG_FILES([ftk.pc
+				Makefile
+                doc/Makefile
+                theme/Makefile
+                theme/default/Makefile
+                data/Makefile
+                testdata/Makefile
+                src/Makefile
+                src/demos/Makefile
+                src/test/Makefile
+                src/backend/Makefile
+                src/backend/directfb/Makefile
+                src/backend/fb/Makefile
+                src/backend/sigma/Makefile
+                src/backend/x11-emu/Makefile
+                src/backend/win32/Makefile
+                src/os/Makefile
+                src/os/linux/Makefile
+                src/os/windows/Makefile
+                src/compiler/Makefile
+                src/compiler/ads/Makefile
+                src/compiler/vs2005/Makefile
+                script_binding/Makefile
+                script_binding/lua/Makefile
+                script_binding/lua/lua/Makefile
+                apps/Makefile
+                apps/launcher/Makefile
+                apps/desktop/Makefile
+                apps/desktop/icons/Makefile
+                apps/desktop/xul/Makefile
+                apps/calculator/Makefile
+                apps/calculator/icons/Makefile
+                apps/calculator/xul/Makefile
+                apps/calculator/data/Makefile
+                apps/filemanager/Makefile
+                apps/filemanager/icons/Makefile
+                apps/filemanager/data/Makefile
+                apps/shell/Makefile
+                apps/shell/icons/Makefile
+                apps/shell/data/Makefile
+                tools/Makefile
+                tools/cross-build/Makefile
+                tools/fontextract/Makefile
+                ])
+AC_OUTPUT
