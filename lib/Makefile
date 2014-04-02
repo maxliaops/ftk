@@ -1,6 +1,6 @@
 
-DISPLAY_ENGINE = X11
-FONT_ENGINE    = FREETYPE
+DISPLAY_ENGINE = FB
+FONT_ENGINE    = DEFAULT
 IM_ENGINE      = NONE
 
 
@@ -76,7 +76,7 @@ endif
 OBJS += $(addsuffix .o, $(basename $(SOURCE)))
 
 all : $(OBJS)
-	$(CC) ${LDFLAGS} -o libktk.so ${OBJS}
+	$(CC) ${LDFLAGS} -o libftk.so ${OBJS}
 
 clean:
 	rm -rf *.o im/gpinyin/share/*.o im/gpinyin/ftk/*.o  im/default/*.o display/fb/*.o display/x11/*.o font/*.o
