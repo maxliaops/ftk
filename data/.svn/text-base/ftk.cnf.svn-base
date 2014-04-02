@@ -1,7 +1,0 @@
-<statusbar     enable="0" />
-<cursor        enable="0" />
-<theme         name="default" />
-
-<data_dir      value="/home/kexue/ftk2/data" /> 
-<test_data_dir value="/home/kexue/ftk2/testdata" />
-
