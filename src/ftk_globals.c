@@ -38,7 +38,6 @@ struct _FtkGlobals
 	FtkTheme* theme;
 	FtkDisplay* display;
 	FtkMainLoop* main_loop;
-	FtkLogLevel  log_level;
 	FtkWidget*   status_panel;
 	FtkWndManager* wnd_manager;
 	FtkBitmapFactory* bitmap_factory;
@@ -68,11 +67,6 @@ FtkTheme*          ftk_default_theme(void)
 FtkMainLoop*      ftk_default_main_loop(void)
 {
 	return g_globals.main_loop;
-}
-
-FtkLogLevel       ftk_default_log_level(void)
-{
-	return g_globals.log_level;
 }
 
 FtkWndManager*    ftk_default_wnd_manager(void)
@@ -112,13 +106,6 @@ void ftk_set_display(FtkDisplay* display)
 void ftk_set_main_loop(FtkMainLoop* main_loop)
 {
 	g_globals.main_loop = main_loop;
-
-	return;
-}
-
-void ftk_set_log_level(FtkLogLevel level)
-{
-	g_globals.log_level = level;
 
 	return;
 }

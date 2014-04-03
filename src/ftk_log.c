@@ -30,7 +30,21 @@
  */
 
 #include "ftk_log.h"
-#include "ftk_globals.h"
+
+FtkLogLevel  g_log_level;
+
+FtkLogLevel ftk_default_log_level(void)
+{
+	return g_log_level;
+}
+
+void ftk_set_log_level(FtkLogLevel level)
+{
+	g_log_level = level;
+
+	return;
+}
+
 
 Ret ftk_log(const char* format, va_list ap)
 {

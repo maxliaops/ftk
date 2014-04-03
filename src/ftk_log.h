@@ -33,6 +33,9 @@
 
 #include "ftk_typedef.h"
 
+FtkLogLevel       ftk_default_log_level(void);
+void ftk_set_log_level(FtkLogLevel level);
+
 Ret ftk_logv(const char* format, ...);
 Ret ftk_logd(const char* format, ...);
 Ret ftk_loge(const char* format, ...);
